@@ -50,6 +50,7 @@ def quiz():
 
     pergunta_atual = quiz._perguntas[indice]
     texto, opcoes = pergunta_atual.exibir()
+    
 
     return render_template('quiz.html', pergunta=texto, opcoes=opcoes)
 
