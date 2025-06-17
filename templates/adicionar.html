@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Pergunta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="mb-4 text-center">Adicionar Nova Pergunta</h2>
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Pergunta:</label>
+                <input type="text" name="pergunta" class="form-control" required>
+            </div>
+
+            {% for i in range(4) %}
+            <div class="mb-2">
+                <label class="form-label">Opção {{ i + 1 }}:</label>
+                <input type="text" name="opcao{{ i }}" class="form-control" required>
+            </div>
+            {% endfor %}
+
+            <div class="mb-3">
+                <label class="form-label">Índice da resposta correta (1 a 4):</label>
+                <input type="number" name="correta" class="form-control" min="1" max="4" required>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success">Salvar Pergunta</button>
+                <a href="/" class="btn btn-outline-primary">Voltar e Iniciar o Quiz</a>
+            </div>
+        </form>
+
+        {% if session.get('perguntas_personalizadas') %}
+            <hr>
+            <h5 class="mt-4">Perguntas já adicionadas:</h5>
+            <ul class="list-group">
+                {% for p in session.get('perguntas_personalizadas') %}
+                    <li class="list-group-item">{{ p.texto }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

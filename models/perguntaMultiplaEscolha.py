@@ -6,15 +6,10 @@ class PerguntaMultiplaEscolha(Pergunta):
         self._opcoes = opcoes
 
     def exibir(self):
-        print(f"\n{self._texto}")
-        for i, opcao in enumerate(self._opcoes, 1):
-            print(f"{i}) {opcao}")
+        return self._texto, self._opcoes
 
     def verificar_resposta(self, resposta_usuario):
         try:
-            indice = int(resposta_usuario) - 1
-            if indice < 0 or indice >= len(self._opcoes):
-                return False
-            return self._opcoes[indice].strip().lower() == self._resposta_correta.strip().lower()
-        except ValueError:
+            return self._opcoes[int(resposta_usuario)-1] == self._resposta_correta
+        except:
             return False

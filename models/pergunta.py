@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-# Classe base para perguntas
 class Pergunta(ABC):
     def __init__(self, texto, resposta_correta):
         self._texto = texto
