@@ -36,23 +36,27 @@ def quiz():
     indice = session.get('indice', 1)
     pontuacao = session.get('pontuacao', 0)
 
+    resultado_resposta = None
+
     if request.method == 'POST':
         resposta = request.form['resposta']
         pergunta = quiz._perguntas[indice]
         if pergunta.verificar_resposta(resposta):
             pontuacao += 1
+            resultado_resposta = 'acerto'
+        else:
+            resultado_resposta = 'erro'
         indice += 1
         session['indice'] = indice
         session['pontuacao'] = pontuacao
 
     if indice >= quiz.total_perguntas():
-        return redirect(url_for('resultado'))
+        return render_template('quiz.html', fim_quiz=True, resultado_resposta=resultado_resposta)
 
     pergunta_atual = quiz._perguntas[indice]
     texto, opcoes = pergunta_atual.exibir()
     
-
-    return render_template('quiz.html', pergunta=texto, opcoes=opcoes)
+    return render_template('quiz.html', pergunta=texto, opcoes=opcoes, resultado_resposta=resultado_resposta, fim_quiz=False)
 
 @app.route('/adicionar', methods=['GET', 'POST'])
 def adicionar():

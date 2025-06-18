@@ -7,21 +7,56 @@
 </head>
 <body class="bg-light">
 
-<div class="container mt-5">
-    <div class="card shadow p-4">
-        <h3 class="mb-4">{{ pergunta }}</h3>
+    <div class="container mt-5">
+        <div class="card shadow p-4">
+            <h3 class="mb-4">{{ pergunta }}</h3>
 
-        <form method="POST">
-            <div class="d-grid gap-2">
-                {% for opcao in opcoes %}
-                    <button type="submit" name="resposta" value="{{ loop.index0+1 }}" class="btn btn-outline-primary">
-                        {{ opcao }}
-                    </button>
-                {% endfor %}
-            </div>
-        </form>
+            <form method="POST">
+                <div class="d-grid gap-2">
+                    {% for opcao in opcoes %}
+                        <button type="submit" name="resposta" value="{{ loop.index0+1 }}" class="btn btn-outline-primary">
+                            {{ opcao }}
+                        </button>
+                    {% endfor %}
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
+    <script>
+        function playSound(audioFile, callback) {
+            const audio = new Audio(audioFile);
+            audio.play();
+            audio.onended = function() {
+                if (callback) callback();
+            };
+        }
+
+        {% if resultado_resposta == 'acerto' %}
+            const soundFile = "{{ url_for('static', filename='audio/acerto.mp3') }}";
+        {% elif resultado_resposta == 'erro' %}
+            const soundFile = "{{ url_for('static', filename='audio/erro.mp3') }}";
+        {% else %}
+            const soundFile = null;
+        {% endif %}
+
+        const isEnd = {{ 'true' if fim_quiz else 'false' }};
+
+        if (soundFile) {
+            playSound(soundFile, function() {
+                if (isEnd) {
+                    // Aguarda um pequeno tempo depois do som antes de redirecionar (opcional)
+                    setTimeout(function() {
+                        window.location.href = "{{ url_for('resultado') }}";
+                    }, 500);  // meio segundo extra, pode ajustar
+                }
+            });
+        } else {
+            // Caso sem som (primeira pergunta por exemplo), pode redirecionar direto se for o fim
+            if (isEnd) {
+                window.location.href = "{{ url_for('resultado') }}";
+            }
+        }
+    </script>
 </body>
 </html>
